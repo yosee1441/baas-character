@@ -1,0 +1,13 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:14.3
+    restart: always
+    environment:
+      - POSTGRES_DB=rickAndMortyDB
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=pgWithNestRickAndMorty*
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
