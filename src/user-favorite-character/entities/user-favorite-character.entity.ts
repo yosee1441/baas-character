@@ -5,26 +5,28 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  OneToMany,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
-import { Character as CharacterInterface } from '../interfaces';
-import { UserFavoriteCharacter } from 'src/user-favorite-character/entities';
+import { User } from 'src/user/entities';
+import { Character } from 'src/character/entities';
 
 @Entity()
-export class Character {
-  /**
-   * this decorator will help to auto generate id for the table.
-   */
+export class UserFavoriteCharacter {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('jsonb', {
-    name: 'jsonb_rick_and_morty',
-    nullable: false,
-    default: {},
-  })
-  jsonbRickAndMorty: CharacterInterface;
+  @ManyToOne(() => User, (user) => user.favoriteCharacters)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
+
+  @ManyToOne(() => Character, (character) => character.favoriteCharacters)
+  @JoinColumn({ name: 'character_id' })
+  character: Character;
+
+  @Column({ name: 'is_favorite', default: false })
+  isFavorite: boolean;
 
   @CreateDateColumn({
     name: 'created_at',
@@ -47,10 +49,4 @@ export class Character {
     type: 'timestamp',
   })
   deletedAt?: Date;
-
-  @OneToMany(
-    () => UserFavoriteCharacter,
-    (userFavoriteCharacter) => userFavoriteCharacter.character,
-  )
-  favoriteCharacters: UserFavoriteCharacter[];
 }

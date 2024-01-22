@@ -8,23 +8,15 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import { Character as CharacterInterface } from '../interfaces';
 import { UserFavoriteCharacter } from 'src/user-favorite-character/entities';
 
 @Entity()
-export class Character {
-  /**
-   * this decorator will help to auto generate id for the table.
-   */
+export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('jsonb', {
-    name: 'jsonb_rick_and_morty',
-    nullable: false,
-    default: {},
-  })
-  jsonbRickAndMorty: CharacterInterface;
+  @Column()
+  email: string;
 
   @CreateDateColumn({
     name: 'created_at',
@@ -50,7 +42,7 @@ export class Character {
 
   @OneToMany(
     () => UserFavoriteCharacter,
-    (userFavoriteCharacter) => userFavoriteCharacter.character,
+    (userFavoriteCharacter) => userFavoriteCharacter.user,
   )
   favoriteCharacters: UserFavoriteCharacter[];
 }
