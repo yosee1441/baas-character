@@ -5,7 +5,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  OneToMany,
 } from 'typeorm';
+
+import { Character as CharacterInterface } from '../interfaces';
+import { UserFavoriteCharacter } from 'src/user-favorite-character/entities';
 
 @Entity()
 export class Character {
@@ -20,7 +24,7 @@ export class Character {
     nullable: false,
     default: {},
   })
-  jsonbRickAndMorty: string;
+  jsonbRickAndMorty: CharacterInterface;
 
   @CreateDateColumn({
     name: 'created_at',
@@ -43,4 +47,10 @@ export class Character {
     type: 'timestamp',
   })
   deletedAt?: Date;
+
+  @OneToMany(
+    () => UserFavoriteCharacter,
+    (userFavoriteCharacter) => userFavoriteCharacter.character,
+  )
+  favoriteCharacters: UserFavoriteCharacter[];
 }
